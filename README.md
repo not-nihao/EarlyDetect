@@ -1,6 +1,6 @@
 # EarlyDetect - AI Cancer Screening Assistant
 
-![EarlyDetect Mobile Landing Page](./screenshots/mobile-landing-page.png)
+![EarlyDetect Mobile Landing Page](./public/mobile-landing-page.jpg)
 
 ### View the live project at: https://v0-early-detect-prototype.vercel.app/
 
