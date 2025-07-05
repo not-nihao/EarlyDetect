@@ -1,4 +1,4 @@
-# EarlyDetect - AI Cancer Screening Assistant
+# EarlyDetect - Empowering Cancer Screening Uptake through AI-Driven Digital Assistance
 
 ![EarlyDetect Mobile Landing Page](./public/mobile-landing-page.jpg)
 
@@ -57,30 +57,30 @@ Cancer screening is crucial for early detection and improved health outcomes, ye
 ### Installation
 
 1. Clone the repository:
-\`\`\`bash
+```bash
 git clone https://github.com/your-username/earlydetect-prototype.git
 cd earlydetect-prototype
-\`\`\`
+```
 
 2. Install dependencies:
-\`\`\`bash
+```bash
 pnpm install
-\`\`\`
+```
 
 3. Set up environment variables:
-\`\`\`bash
+```bash
 cp .env.example .env.local
-\`\`\`
+```
 
-Add your OpenAI API key to \`.env.local\`:
-\`\`\`
+Add your OpenAI API key to `.env.local`:
+```
 OPENAI_API_KEY=your_openai_api_key_here
-\`\`\`
+```
 
 4. Run the development server:
-\`\`\`bash
+```bash
 pnpm dev
-\`\`\`
+```
 
 5. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
@@ -99,8 +99,8 @@ pnpm dev
 
 ## Project Structure
 
-\`\`\`
-├── app/
+```
+├── app/ 
 │   ├── api/chat/          # AI chat API endpoint
 │   ├── questionnaire/     # Multi-step health assessment
 │   ├── personality/       # AI personality selection
@@ -109,7 +109,7 @@ pnpm dev
 │   └── recommendations/  # Personalized health resources
 ├── components/ui/        # Reusable UI components
 └── lib/                 # Utility functions
-\`\`\`
+```
 
 ## Future Enhancements
 
@@ -121,11 +121,11 @@ pnpm dev
 - Telehealth consultation booking
 - Health tracking and progress monitoring
 
-## Authors
+## Project Authors
 
-- **Nihal Deb** - Full-stack development and AI integration
-- **Nicholas Ngan** - Frontend development and UX design
-- **Gary Ang** - Backend development and healthcare domain expertise
+- **Nihal Deb** - Full-stack development
+- **Nicholas Ngan** - AI integration
+- **Gary Ang** - Healthcare domain expertise
 
 ## Disclaimer
 
@@ -137,12 +137,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Acknowledgments
 
-- Built for the healthcare innovation hackathon
+- Built for the Sahlgrenska Global Health Hackathon
 - Inspired by Singapore's national cancer screening programs
 - Powered by OpenAI's GPT-4 and Vercel's AI SDK
 - UI components from shadcn/ui
 
 ---
-
-**EarlyDetect** - Empowering Cancer Screening Uptake through AI-Driven Digital Assistance
-\`\`\`
+```
