@@ -1,4 +1,4 @@
-import { openai } from "@ai-sdk/openai"
+import { google } from "@ai-sdk/google"
 import { streamText } from "ai"
 
 export const maxDuration = 30
@@ -15,9 +15,35 @@ const personalityPrompts = {
 }
 
 export async function POST(req: Request) {
-  const { messages, personality, userData } = await req.json()
+  try {
+    const { messages, personality, userData } = await req.json()
 
-  const systemPrompt = `${personalityPrompts[personality as keyof typeof personalityPrompts]}
+    // Use Gemini API key
+    const geminiApiKey = "AIzaSyDTLFAqhVBBgeJb6rt-rycAQrtVDq1wrUg"
+
+    if (!geminiApiKey) {
+      // Fallback response when no API key is configured
+      const fallbackResponse = generateFallbackResponse(userData, personality)
+
+      return new Response(
+        new ReadableStream({
+          start(controller) {
+            const encoder = new TextEncoder()
+            controller.enqueue(encoder.encode(`data: ${JSON.stringify({ type: "text", text: fallbackResponse })}\n\n`))
+            controller.close()
+          },
+        }),
+        {
+          headers: {
+            "Content-Type": "text/plain; charset=utf-8",
+            "Cache-Control": "no-cache",
+            Connection: "keep-alive",
+          },
+        },
+      )
+    }
+
+    const systemPrompt = `${personalityPrompts[personality as keyof typeof personalityPrompts]}
 
 You are a cancer screening recommendation assistant. Based on the user's health data: ${JSON.stringify(userData)}, provide personalized cancer screening recommendations.
 
@@ -39,11 +65,87 @@ Common screenings to consider:
 
 You can also help book appointments when requested.`
 
-  const result = streamText({
-    model: openai("gpt-4o"),
-    system: systemPrompt,
-    messages,
-  })
+    const result = streamText({
+      model: google("gemini-1.5-pro", {
+        apiKey: geminiApiKey,
+      }),
+      system: systemPrompt,
+      messages,
+    })
 
-  return result.toDataStreamResponse()
+    return result.toDataStreamResponse()
+  } catch (error) {
+    console.error("Chat API error:", error)
+
+    // Fallback response for any errors
+    const { userData, personality } = await req.json().catch(() => ({ userData: null, personality: "professional" }))
+    const fallbackResponse = generateFallbackResponse(userData, personality)
+
+    return new Response(
+      new ReadableStream({
+        start(controller) {
+          const encoder = new TextEncoder()
+          controller.enqueue(encoder.encode(`data: ${JSON.stringify({ type: "text", text: fallbackResponse })}\n\n`))
+          controller.close()
+        },
+      }),
+      {
+        headers: {
+          "Content-Type": "text/plain; charset=utf-8",
+          "Cache-Control": "no-cache",
+          Connection: "keep-alive",
+        },
+      },
+    )
+  }
+}
+
+function generateFallbackResponse(userData: any, personality: string): string {
+  if (!userData) {
+    return "I'd be happy to help you with cancer screening recommendations! However, I don't have access to your health information. Please complete the health assessment first so I can provide personalized recommendations."
+  }
+
+  const age = Number.parseInt(userData.age) || 25
+  const gender = userData.gender || "not specified"
+  const familyHistory = userData.familyHistory || []
+
+  const recommendations = []
+
+  // Age and gender-based recommendations
+  if (gender === "female") {
+    if (age >= 21) {
+      recommendations.push("Pap smear for cervical cancer screening")
+    }
+    if (age >= 40 || familyHistory.includes("Breast Cancer")) {
+      recommendations.push("mammogram for breast cancer screening")
+    }
+  }
+
+  if (gender === "male" && age >= 50) {
+    recommendations.push("PSA test for prostate cancer screening")
+  }
+
+  if (age >= 45) {
+    recommendations.push("colonoscopy for colorectal cancer screening")
+  }
+
+  if (age >= 50 && userData.smokingStatus === "current") {
+    recommendations.push("low-dose CT scan for lung cancer screening")
+  }
+
+  const primaryRecommendation = recommendations[0] || "general health screening"
+
+  const personalityResponses = {
+    analytical: `Based on your health data analysis - age ${age}, gender: ${gender}, and risk factors - I recommend you get a ${primaryRecommendation}. This recommendation follows evidence-based guidelines for your demographic profile.`,
+    empathetic: `I understand that thinking about cancer screening can feel overwhelming, but I'm here to support you. Based on the information you've shared, I would gently recommend you consider getting a ${primaryRecommendation}. This is a proactive step for your health and wellbeing.`,
+    enthusiastic: `Great news! Based on your health profile, I have some positive recommendations for you! I'd recommend you get a ${primaryRecommendation} - this is an excellent way to stay on top of your health and catch any issues early!`,
+    professional: `Based on your clinical profile and risk assessment, I recommend you schedule a ${primaryRecommendation}. This screening is indicated based on current medical guidelines for individuals with your demographic and risk factors.`,
+  }
+
+  const response =
+    personalityResponses[personality as keyof typeof personalityResponses] || personalityResponses.professional
+
+  return `${response} Would you like me to help you book an appointment for that?
+
+*Please note: This is for educational purposes and does not replace professional medical advice. Always consult with qualified healthcare providers for medical decisions.*`
 }
