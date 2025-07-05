@@ -57,30 +57,30 @@ Cancer screening is crucial for early detection and improved health outcomes, ye
 ### Installation
 
 1. Clone the repository:
-```bash
+\`\`\`bash
 git clone https://github.com/your-username/earlydetect-prototype.git
 cd earlydetect-prototype
-```
+\`\`\`
 
 2. Install dependencies:
-```bash
+\`\`\`bash
 pnpm install
-```
+\`\`\`
 
 3. Set up environment variables:
-```bash
+\`\`\`bash
 cp .env.example .env.local
-```
+\`\`\`
 
 Add your OpenAI API key to `.env.local`:
-```
+\`\`\`
 OPENAI_API_KEY=your_openai_api_key_here
-```
+\`\`\`
 
 4. Run the development server:
-```bash
+\`\`\`bash
 pnpm dev
-```
+\`\`\`
 
 5. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
@@ -99,7 +99,7 @@ pnpm dev
 
 ## Project Structure
 
-```
+\`\`\`
 ├── app/ 
 │   ├── api/chat/          # AI chat API endpoint
 │   ├── questionnaire/     # Multi-step health assessment
@@ -109,7 +109,7 @@ pnpm dev
 │   └── recommendations/  # Personalized health resources
 ├── components/ui/        # Reusable UI components
 └── lib/                 # Utility functions
-```
+\`\`\`
 
 ## Future Enhancements
 
@@ -143,4 +143,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - UI components from shadcn/ui
 
 ---
-```
+\`\`\`
