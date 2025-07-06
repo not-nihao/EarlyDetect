@@ -252,7 +252,7 @@ To get started, could you tell me a bit about yourself? Maybe your age and what 
               key={index}
               variant="outline"
               onClick={() => handleQuickResponse(option)}
-              className="h-auto p-3 text-left justify-start"
+              className="h-auto p-3 text-left justify-start text-sm"
               disabled={isLoading}
             >
               {option}
@@ -272,6 +272,7 @@ To get started, could you tell me a bit about yourself? Maybe your age and what 
               size="sm"
               onClick={() => handleQuickResponse(option)}
               disabled={isLoading}
+              className="text-xs"
             >
               {option}
             </Button>
@@ -284,8 +285,8 @@ To get started, could you tell me a bit about yourself? Maybe your age and what 
       return (
         <div className="mb-4 p-4 border rounded-lg bg-gray-50">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-gray-600">Scale: {questionContext.range.min}</span>
-            <span className="font-medium">{scaleValue[0]}</span>
+            <span className="text-sm text-gray-600">{questionContext.range.min}</span>
+            <span className="font-medium text-lg">{scaleValue[0]}</span>
             <span className="text-sm text-gray-600">{questionContext.range.max}</span>
           </div>
           <Slider
@@ -307,22 +308,22 @@ To get started, could you tell me a bit about yourself? Maybe your age and what 
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Header */}
-      <div className="bg-white border-b px-4 py-3">
+      <div className="bg-white border-b px-4 py-3 flex-shrink-0">
         <div className="max-w-6xl mx-auto">
-          <h1 className="text-xl font-bold">Health Conversation</h1>
+          <h1 className="text-lg md:text-xl font-bold">Health Conversation</h1>
 
           {/* Progress Bar */}
-          <div className="mt-3 flex items-center space-x-4">
+          <div className="mt-3 flex items-center space-x-2 md:space-x-4">
             <div className="flex-1 bg-gray-200 rounded-full h-2 relative">
               <div
                 className="bg-blue-600 h-2 rounded-full transition-all duration-300"
                 style={{ width: `${(questionContext.current / questionContext.total) * 100}%` }}
               />
-              <div className="absolute -top-6 left-0 text-xs text-gray-500">Previous</div>
+              <div className="absolute -top-6 left-0 text-xs text-gray-500 hidden sm:block">Previous</div>
               <div
-                className="absolute -top-6 text-xs font-medium text-blue-600"
+                className="absolute -top-6 text-xs font-medium text-blue-600 hidden sm:block"
                 style={{
                   left: `${(questionContext.current / questionContext.total) * 100}%`,
                   transform: "translateX(-50%)",
@@ -330,7 +331,7 @@ To get started, could you tell me a bit about yourself? Maybe your age and what 
               >
                 {questionContext.category}
               </div>
-              <div className="absolute -top-6 right-0 text-xs text-gray-500">Next</div>
+              <div className="absolute -top-6 right-0 text-xs text-gray-500 hidden sm:block">Next</div>
             </div>
             <span className="text-sm font-medium whitespace-nowrap">
               {questionContext.current}/{questionContext.total}
@@ -339,11 +340,32 @@ To get started, could you tell me a bit about yourself? Maybe your age and what 
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto p-4">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 h-[calc(100vh-140px)]">
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col max-w-6xl mx-auto w-full p-4 gap-4">
+        {/* Mobile Quick Actions */}
+        {isMobile && (
+          <div className="overflow-x-auto flex-shrink-0">
+            <div className="flex space-x-2 pb-2 min-w-max">
+              <Button variant="outline" size="sm" className="whitespace-nowrap bg-white text-xs">
+                Tone: {chatTone}
+              </Button>
+              <Button variant="outline" size="sm" className="whitespace-nowrap bg-white text-xs">
+                Depth: {chatDepth}
+              </Button>
+              <Button variant="outline" size="sm" className="whitespace-nowrap bg-white text-xs">
+                Language: {language}
+              </Button>
+              <Button variant="outline" size="sm" className="whitespace-nowrap bg-white text-xs">
+                Help Me Out
+              </Button>
+            </div>
+          </div>
+        )}
+
+        <div className="flex-1 flex gap-4 min-h-0">
           {/* Personalization Panel - Desktop Only */}
           {!isMobile && (
-            <div className="lg:col-span-2">
+            <div className="w-64 flex-shrink-0">
               <Card className="h-full">
                 <CardContent className="p-4">
                   <h3 className="font-semibold mb-4 text-sm">Personalization</h3>
@@ -353,13 +375,13 @@ To get started, could you tell me a bit about yourself? Maybe your age and what 
                       <label className="text-xs font-medium text-gray-700 mb-2 block">Chat Tone</label>
                       <Tabs value={chatTone} onValueChange={setChatTone}>
                         <TabsList className="grid w-full grid-cols-1 h-auto">
-                          <TabsTrigger value="friendly" className="text-xs">
+                          <TabsTrigger value="friendly" className="text-xs py-1">
                             Friendly
                           </TabsTrigger>
-                          <TabsTrigger value="professional" className="text-xs">
+                          <TabsTrigger value="professional" className="text-xs py-1">
                             Professional
                           </TabsTrigger>
-                          <TabsTrigger value="casual" className="text-xs">
+                          <TabsTrigger value="casual" className="text-xs py-1">
                             Casual
                           </TabsTrigger>
                         </TabsList>
@@ -370,13 +392,13 @@ To get started, could you tell me a bit about yourself? Maybe your age and what 
                       <label className="text-xs font-medium text-gray-700 mb-2 block">Depth</label>
                       <Tabs value={chatDepth} onValueChange={setChatDepth}>
                         <TabsList className="grid w-full grid-cols-1 h-auto">
-                          <TabsTrigger value="brief" className="text-xs">
+                          <TabsTrigger value="brief" className="text-xs py-1">
                             Brief
                           </TabsTrigger>
-                          <TabsTrigger value="balanced" className="text-xs">
+                          <TabsTrigger value="balanced" className="text-xs py-1">
                             Balanced
                           </TabsTrigger>
-                          <TabsTrigger value="detailed" className="text-xs">
+                          <TabsTrigger value="detailed" className="text-xs py-1">
                             Detailed
                           </TabsTrigger>
                         </TabsList>
@@ -387,10 +409,10 @@ To get started, could you tell me a bit about yourself? Maybe your age and what 
                       <label className="text-xs font-medium text-gray-700 mb-2 block">Language</label>
                       <Tabs value={language} onValueChange={setLanguage}>
                         <TabsList className="grid w-full grid-cols-1 h-auto">
-                          <TabsTrigger value="english" className="text-xs">
+                          <TabsTrigger value="english" className="text-xs py-1">
                             English
                           </TabsTrigger>
-                          <TabsTrigger value="simple" className="text-xs">
+                          <TabsTrigger value="simple" className="text-xs py-1">
                             Simple
                           </TabsTrigger>
                         </TabsList>
@@ -401,10 +423,10 @@ To get started, could you tell me a bit about yourself? Maybe your age and what 
                       <label className="text-xs font-medium text-gray-700 mb-2 block">Accessibility</label>
                       <Tabs value={accessibility} onValueChange={setAccessibility}>
                         <TabsList className="grid w-full grid-cols-1 h-auto">
-                          <TabsTrigger value="standard" className="text-xs">
+                          <TabsTrigger value="standard" className="text-xs py-1">
                             Standard
                           </TabsTrigger>
-                          <TabsTrigger value="high-contrast" className="text-xs">
+                          <TabsTrigger value="high-contrast" className="text-xs py-1">
                             High Contrast
                           </TabsTrigger>
                         </TabsList>
@@ -432,38 +454,21 @@ To get started, could you tell me a bit about yourself? Maybe your age and what 
           )}
 
           {/* Main Chat Area */}
-          <div className={cn("lg:col-span-8", !isMobile && "lg:col-span-8", isMobile && "col-span-1")}>
-            {/* Mobile Quick Actions */}
-            {isMobile && (
-              <div className="mb-4 overflow-x-auto">
-                <div className="flex space-x-2 pb-2">
-                  <Button variant="outline" size="sm" className="whitespace-nowrap bg-transparent">
-                    Tone: {chatTone}
-                  </Button>
-                  <Button variant="outline" size="sm" className="whitespace-nowrap bg-transparent">
-                    Depth: {chatDepth}
-                  </Button>
-                  <Button variant="outline" size="sm" className="whitespace-nowrap bg-transparent">
-                    Language: {language}
-                  </Button>
-                  <Button variant="outline" size="sm" className="whitespace-nowrap bg-transparent">
-                    Help Me Out
-                  </Button>
-                </div>
-              </div>
-            )}
-
+          <div className="flex-1 min-w-0 relative">
             <Card className="h-full flex flex-col">
               {/* Chat Messages */}
-              <CardContent className="flex-1 overflow-y-auto p-4 space-y-4 max-h-[60vh]">
+              <CardContent
+                className="flex-1 overflow-y-auto p-4 space-y-4"
+                style={{ maxHeight: isMobile ? "50vh" : "60vh" }}
+              >
                 {messages.map((message) => (
                   <div key={message.id} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
                     <div
-                      className={`flex items-start space-x-2 max-w-[80%] ${
+                      className={`flex items-start space-x-2 max-w-[85%] sm:max-w-[80%] ${
                         message.role === "user" ? "flex-row-reverse space-x-reverse" : ""
                       }`}
                     >
-                      <Avatar className="h-8 w-8">
+                      <Avatar className="h-8 w-8 flex-shrink-0">
                         <AvatarFallback>
                           {message.role === "user" ? <User className="h-4 w-4" /> : <Bot className="h-4 w-4" />}
                         </AvatarFallback>
@@ -473,7 +478,7 @@ To get started, could you tell me a bit about yourself? Maybe your age and what 
                           message.role === "user" ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-900"
                         }`}
                       >
-                        <div className="text-sm whitespace-pre-wrap">
+                        <div className="text-sm whitespace-pre-wrap break-words">
                           {message.content
                             .replace(/\[DATA_UPDATE\].*?\[\/DATA_UPDATE\]/s, "")
                             .replace(/\[QUESTION_CONTEXT\].*?\[\/QUESTION_CONTEXT\]/s, "")
@@ -530,8 +535,15 @@ To get started, could you tell me a bit about yourself? Maybe your age and what 
               </CardContent>
 
               {/* Question Input Widgets */}
-              <div className="p-4 border-t">
+              <div className="p-4 border-t flex-shrink-0">
                 {renderQuestionInput()}
+
+                {/* Voice transcript display */}
+                {transcript && (
+                  <div className="mb-3 p-2 bg-blue-50 rounded text-sm text-blue-700 break-words">
+                    Voice: {transcript}
+                  </div>
+                )}
 
                 {/* Text Input */}
                 <form onSubmit={handleSubmit} className="flex space-x-2">
@@ -539,7 +551,7 @@ To get started, could you tell me a bit about yourself? Maybe your age and what 
                     value={input}
                     onChange={handleInputChange}
                     placeholder="Type your response..."
-                    className="flex-1"
+                    className="flex-1 min-w-0"
                     disabled={isLoading}
                   />
                   <Button
@@ -548,123 +560,160 @@ To get started, could you tell me a bit about yourself? Maybe your age and what 
                     size="icon"
                     onClick={isListening ? stopListening : startListening}
                     disabled={!browserSupportsSpeech}
-                    className={isListening ? "bg-red-50 border-red-200" : ""}
+                    className={cn("flex-shrink-0", isListening ? "bg-red-50 border-red-200" : "")}
                   >
                     {isListening ? <MicOff className="h-4 w-4 text-red-500" /> : <Mic className="h-4 w-4" />}
                   </Button>
-                  <Button type="submit" disabled={isLoading || !input.trim()}>
+                  <Button type="submit" disabled={isLoading || !input.trim()} className="flex-shrink-0">
                     <Send className="h-4 w-4" />
                   </Button>
                 </form>
-
-                {transcript && (
-                  <div className="mt-2 p-2 bg-blue-50 rounded text-sm text-blue-700">Voice: {transcript}</div>
-                )}
               </div>
             </Card>
-          </div>
 
-          {/* Information Gathered Tab - Desktop */}
-          {!isMobile && (
-            <div className="lg:col-span-2 relative">
-              <div
-                className={cn(
-                  "absolute right-0 top-0 h-full bg-white border rounded-lg shadow-lg transition-transform duration-300 z-10",
-                  infoGatheredOpen ? "translate-x-0" : "translate-x-full",
-                )}
-                style={{ width: "300px" }}
-              >
-                <div className="p-4 h-full overflow-y-auto">
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="font-semibold text-sm">Information Gathered</h3>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setInfoGatheredOpen(false)}
-                      className="h-6 w-6 p-0"
-                    >
-                      <X className="h-4 w-4" />
-                    </Button>
+            {/* Information Gathered Tab - Desktop */}
+            {!isMobile && (
+              <>
+                <div
+                  className={cn(
+                    "absolute right-0 top-0 h-full bg-white border rounded-lg shadow-lg transition-transform duration-300 z-10",
+                    infoGatheredOpen ? "translate-x-0" : "translate-x-full",
+                  )}
+                  style={{ width: "280px" }}
+                >
+                  <div className="p-4 h-full overflow-y-auto">
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="font-semibold text-sm">Information Gathered</h3>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setInfoGatheredOpen(false)}
+                        className="h-6 w-6 p-0 flex-shrink-0"
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+
+                    <div className="space-y-4">
+                      {Object.keys(conversationData.demographics).length > 0 && (
+                        <div>
+                          <h4 className="text-xs font-medium text-gray-700 mb-2">Demographics</h4>
+                          <div className="space-y-1 text-xs">
+                            {conversationData.demographics.age && <div>Age: {conversationData.demographics.age}</div>}
+                            {conversationData.demographics.gender && (
+                              <div>Gender: {conversationData.demographics.gender}</div>
+                            )}
+                            {conversationData.demographics.race && (
+                              <div>Race: {conversationData.demographics.race}</div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+
+                      {Object.keys(conversationData.medical).length > 0 && (
+                        <div>
+                          <h4 className="text-xs font-medium text-gray-700 mb-2">Medical History</h4>
+                          <div className="space-y-1 text-xs">
+                            {conversationData.medical.familyHistory &&
+                              conversationData.medical.familyHistory.length > 0 && (
+                                <div>Family History: {conversationData.medical.familyHistory.join(", ")}</div>
+                              )}
+                            {conversationData.medical.chronicConditions &&
+                              conversationData.medical.chronicConditions.length > 0 && (
+                                <div>Conditions: {conversationData.medical.chronicConditions.join(", ")}</div>
+                              )}
+                          </div>
+                        </div>
+                      )}
+
+                      {Object.keys(conversationData.lifestyle).length > 0 && (
+                        <div>
+                          <h4 className="text-xs font-medium text-gray-700 mb-2">Lifestyle</h4>
+                          <div className="space-y-1 text-xs">
+                            {conversationData.lifestyle.smokingStatus && (
+                              <div>Smoking: {conversationData.lifestyle.smokingStatus}</div>
+                            )}
+                            {conversationData.lifestyle.physicalActivity && (
+                              <div>Exercise: {conversationData.lifestyle.physicalActivity}</div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+
+                      {isComplete && (
+                        <div className="pt-4 border-t">
+                          <div className="text-center">
+                            <div className="text-green-600 font-medium mb-2 text-sm">✓ Complete</div>
+                            <Button onClick={handleContinue} size="sm" className="w-full">
+                              Continue
+                              <ArrowRight className="h-3 w-3 ml-1" />
+                            </Button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
-
-                  {Object.keys(conversationData.demographics).length > 0 && (
-                    <div className="mb-4">
-                      <h4 className="text-xs font-medium text-gray-700 mb-2">Demographics</h4>
-                      <div className="space-y-1 text-xs">
-                        {conversationData.demographics.age && <div>Age: {conversationData.demographics.age}</div>}
-                        {conversationData.demographics.gender && (
-                          <div>Gender: {conversationData.demographics.gender}</div>
-                        )}
-                        {conversationData.demographics.race && <div>Race: {conversationData.demographics.race}</div>}
-                      </div>
-                    </div>
-                  )}
-
-                  {Object.keys(conversationData.medical).length > 0 && (
-                    <div className="mb-4">
-                      <h4 className="text-xs font-medium text-gray-700 mb-2">Medical History</h4>
-                      <div className="space-y-1 text-xs">
-                        {conversationData.medical.familyHistory &&
-                          conversationData.medical.familyHistory.length > 0 && (
-                            <div>Family History: {conversationData.medical.familyHistory.join(", ")}</div>
-                          )}
-                        {conversationData.medical.chronicConditions &&
-                          conversationData.medical.chronicConditions.length > 0 && (
-                            <div>Conditions: {conversationData.medical.chronicConditions.join(", ")}</div>
-                          )}
-                      </div>
-                    </div>
-                  )}
-
-                  {isComplete && (
-                    <div className="mt-6 pt-4 border-t">
-                      <div className="text-center">
-                        <div className="text-green-600 font-medium mb-2 text-sm">✓ Complete</div>
-                        <Button onClick={handleContinue} size="sm" className="w-full">
-                          Continue
-                          <ArrowRight className="h-3 w-3 ml-1" />
-                        </Button>
-                      </div>
-                    </div>
-                  )}
                 </div>
-              </div>
 
-              {/* Tab Handle */}
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setInfoGatheredOpen(!infoGatheredOpen)}
-                className="absolute right-0 top-1/2 -translate-y-1/2 z-20 rounded-l-lg rounded-r-none px-2"
-              >
-                <ChevronRight className={cn("h-4 w-4 transition-transform", infoGatheredOpen && "rotate-180")} />
-              </Button>
-            </div>
-          )}
+                {/* Tab Handle */}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setInfoGatheredOpen(!infoGatheredOpen)}
+                  className="absolute -right-12 top-1/2 -translate-y-1/2 z-20 rounded-l-lg rounded-r-none px-2 bg-white"
+                >
+                  <ChevronRight className={cn("h-4 w-4 transition-transform", infoGatheredOpen && "rotate-180")} />
+                </Button>
+              </>
+            )}
+          </div>
         </div>
       </div>
 
       {/* Mobile Information Gathered Modal */}
       {isMobile && infoGatheredOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-end">
-          <div className="bg-white w-full h-1/4 rounded-t-lg p-4 transform transition-transform duration-300">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold">Information Gathered</h3>
-              <Button variant="ghost" size="sm" onClick={() => setInfoGatheredOpen(false)} className="h-6 w-6 p-0">
-                <ChevronUp className="h-4 w-4" />
-              </Button>
-            </div>
-            <div className="overflow-y-auto h-full text-sm">
-              {/* Same content as desktop version */}
-              {Object.keys(conversationData.demographics).length > 0 && (
-                <div className="mb-3">
-                  <h4 className="text-xs font-medium text-gray-700 mb-1">Demographics</h4>
-                  <div className="space-y-1 text-xs">
-                    {conversationData.demographics.age && <div>Age: {conversationData.demographics.age}</div>}
-                    {conversationData.demographics.gender && <div>Gender: {conversationData.demographics.gender}</div>}
+          <div className="bg-white w-full h-1/4 rounded-t-lg transform transition-transform duration-300">
+            <div className="p-4 h-full flex flex-col">
+              <div className="flex items-center justify-between mb-3 flex-shrink-0">
+                <h3 className="font-semibold text-sm">Information Gathered</h3>
+                <Button variant="ghost" size="sm" onClick={() => setInfoGatheredOpen(false)} className="h-6 w-6 p-0">
+                  <ChevronUp className="h-4 w-4" />
+                </Button>
+              </div>
+              <div className="overflow-y-auto flex-1 text-sm space-y-3">
+                {Object.keys(conversationData.demographics).length > 0 && (
+                  <div>
+                    <h4 className="text-xs font-medium text-gray-700 mb-1">Demographics</h4>
+                    <div className="space-y-1 text-xs">
+                      {conversationData.demographics.age && <div>Age: {conversationData.demographics.age}</div>}
+                      {conversationData.demographics.gender && (
+                        <div>Gender: {conversationData.demographics.gender}</div>
+                      )}
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
+
+                {Object.keys(conversationData.medical).length > 0 && (
+                  <div>
+                    <h4 className="text-xs font-medium text-gray-700 mb-1">Medical History</h4>
+                    <div className="space-y-1 text-xs">
+                      {conversationData.medical.familyHistory && conversationData.medical.familyHistory.length > 0 && (
+                        <div>Family History: {conversationData.medical.familyHistory.join(", ")}</div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {isComplete && (
+                  <div className="pt-2 border-t">
+                    <Button onClick={handleContinue} size="sm" className="w-full">
+                      Continue to AI Assistant
+                      <ArrowRight className="h-3 w-3 ml-1" />
+                    </Button>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
