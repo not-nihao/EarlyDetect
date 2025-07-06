@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@ai-sdk/google": "latest",
-    "@ai-sdk/openai": "latest",
     "@ai-sdk/react": "latest",
     "@hookform/resolvers": "^3.9.1",
     "@radix-ui/react-accordion": "latest",

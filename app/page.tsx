@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { Heart, Shield, Users, Zap } from "lucide-react"
+import { Heart, Shield, Users, MessageCircle, ClipboardList } from "lucide-react"
 import Link from "next/link"
 
 export default function HomePage() {
@@ -31,10 +31,10 @@ export default function HomePage() {
 
         <Card>
           <CardContent className="flex items-center p-4">
-            <Zap className="h-6 w-6 text-yellow-500 mr-3" />
+            <MessageCircle className="h-6 w-6 text-blue-500 mr-3" />
             <div>
-              <h3 className="font-semibold">AI-Powered</h3>
-              <p className="text-sm text-gray-600">Advanced LLM technology</p>
+              <h3 className="font-semibold">Natural Conversation</h3>
+              <p className="text-sm text-gray-600">Chat naturally with our AI assistant</p>
             </div>
           </CardContent>
         </Card>
@@ -50,11 +50,25 @@ export default function HomePage() {
         </Card>
       </div>
 
-      <Link href="/questionnaire" className="w-full">
-        <Button className="w-full bg-blue-600 hover:bg-blue-700 text-lg py-6">Start Your Health Assessment</Button>
-      </Link>
+      <div className="space-y-3 mb-6">
+        <Link href="/conversation" className="w-full">
+          <Button className="w-full bg-blue-600 hover:bg-blue-700 text-lg py-6">
+            <MessageCircle className="h-5 w-5 mr-2" />
+            Start Health Conversation
+          </Button>
+        </Link>
 
-      <p className="text-xs text-gray-500 text-center mt-4">
+        <div className="text-center text-sm text-gray-500">or</div>
+
+        <Link href="/questionnaire" className="w-full">
+          <Button variant="outline" className="w-full text-lg py-6 bg-transparent">
+            <ClipboardList className="h-5 w-5 mr-2" />
+            Use Traditional Form
+          </Button>
+        </Link>
+      </div>
+
+      <p className="text-xs text-gray-500 text-center">
         This tool is for educational purposes and does not replace professional medical advice.
       </p>
     </div>
